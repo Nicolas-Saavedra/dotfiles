@@ -1,0 +1,22 @@
+* {
+    background: #1e1e2e;         /* base */
+    foreground: #cdd6f4;         /* text */
+    select: #585b70;             /* surface1 */
+
+    pink: #f5c2e7;               /* pink */
+    purple: #cba6f7;             /* mauve */
+    red: #f38ba8;                /* red */
+    orange: #fab387;             /* peach */
+    yellow: #f9e2af;             /* yellow */
+    green: #a6e3a1;              /* green */
+    blue: #89b4fa;               /* blue */
+    gray: #45475a;              /* surface0 */
+
+    active-background: @select;
+    urgent-background: @red;
+    urgent-foreground: @background;
+    selected-background: @active-background;
+    selected-urgent-background: @urgent-background;
+    selected-active-background: @active-background;
+    bordercolor: @select;
+}
