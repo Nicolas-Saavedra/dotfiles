@@ -5,7 +5,9 @@ if status is-interactive
   set -Ux GOBIN $HOME/.local/bin
 
   if test -f ~/.config/private/config.local.fish
-    source ~/.config/private/config.local.fish
+      source ~/.config/private/config.local.fish
+  else
+      echo "(no private config loaded)"
   end
 
   alias lg='lazygit'
