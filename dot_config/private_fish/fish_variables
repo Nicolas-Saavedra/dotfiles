@@ -1,5 +1,6 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
+SETUVAR --export EDITOR:/usr/bin/nvim
 SETUVAR --export GOBIN:/home/tweep/\x2elocal/bin
 SETUVAR --export --path GOPATH:/home/tweep/\x2ecache/go
 SETUVAR __fish_initialized:3800
