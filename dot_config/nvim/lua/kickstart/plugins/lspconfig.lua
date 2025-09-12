@@ -226,6 +226,10 @@ return {
         },
       }
 
+      -- Gleam LSP is the exception to the above, it cannot be installed using
+      -- mason, and therefore, it must be setup separate from the list of servers
+      require('lspconfig').gleam.setup {}
+
       -- Ensure the servers and tools above are installed
       --
       -- You can add other tools here that you want Mason to install
