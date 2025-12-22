@@ -239,7 +239,6 @@ return {
         'stylua', -- Used to format Lua code
         'shfmt',
         'prettierd',
-        'eslint_d',
         'emmet_language_server',
         'tailwindcss',
         'alejandra',
