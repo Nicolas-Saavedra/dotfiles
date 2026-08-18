@@ -93,7 +93,7 @@
     "format": " 󰄛 ",
     "interval": "once",
     "tooltip": false,
-    "on-click": "rofi -show emoji -modi emoji"
+    "on-click": "walker -m symbols"
   },
   "custom/arrow1": {
     "format": "",
