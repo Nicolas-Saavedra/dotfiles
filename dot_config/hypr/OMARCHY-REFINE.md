@@ -37,6 +37,22 @@ reboot, so the running 7.0.14-zen had no modules on disk and ufw's exception cha
 to load while deny-all applied. Recovered by flushing iptables. Rule going forward: never
 enable a firewall (or modprobe anything) when `/lib/modules/$(uname -r)` doesn't exist.
 
+## Known issues found during the session (2026-08-18)
+
+1. **Config reloads bounce eDP-1 while docked.** Hyprland auto-reloads on any config save;
+   reload re-runs the `exec = reload.sh` line, which re-disables eDP-1 after monitors.conf
+   re-enabled it. The output bounce can destroy client surfaces (killed two Ghostty windows).
+   Proposed fix: make reload.sh state-aware (query `hyprctl monitors` and only issue the
+   keyword when the state actually differs), or set `misc:disable_autoreload = true` and
+   reload manually. Not applied yet — edit + reload while docked is itself the hazard.
+2. **XWayland lazy-spawn is broken.** The `:1` socket exists but no Xwayland process spawns
+   on connect, so every X11 client (Steam, gpu-screen-recorder before the fix, `xset`) hangs
+   forever in connect(). No spawn attempt appears in the Hyprland log. Recheck after the next
+   Hyprland restart; if it persists, consider `xwayland { enabled = true }` explicitly or an
+   upstream issue against 0.56.2. record-toggle.sh works around it with `env -u DISPLAY`.
+3. **Hyprland warns .conf format is deprecated** — accelerating the existing `lua-migration`
+   branch is now worth prioritizing (Omarchy 4.0 made the same move).
+
 ## Rollback / revert commands
 
 - **Snapshots off**: `sudo systemctl disable --now snapper-timeline.timer snapper-cleanup.timer && sudo pacman -R snap-pac`
