@@ -1,10 +1,24 @@
-#/usr/bin/env sh
+#!/usr/bin/env sh
 
-# Checks for an external monitor being connected
-if hyprctl monitors | grep -q 'HDMI-A-1'; then
-  if [[ "$1" == "close" ]]; then
-    hyprctl keyword monitor "eDP-1, disable"
-  elif [[ "$1" == "open" ]]; then
+has_external_monitor() {
+  hyprctl monitors | grep '^Monitor ' | grep -vq '^Monitor eDP-1 '
+}
+
+lock_now() {
+  loginctl lock-session
+  pidof hyprlock >/dev/null 2>&1 || hyprlock >/dev/null 2>&1 &
+}
+
+case "${1:-}" in
+  close)
+    lock_now
+    if has_external_monitor; then
+      hyprctl keyword monitor "eDP-1, disable"
+    else
+      systemctl suspend
+    fi
+    ;;
+  open)
     hyprctl keyword monitor "eDP-1, preferred, auto, 1"
-  fi
-fi
+    ;;
+esac

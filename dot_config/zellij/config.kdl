@@ -6,7 +6,6 @@ keybinds {
     normal clear-defaults=true {
         bind "F12" { SwitchToMode "locked"; }
         bind "Ctrl s" { SwitchToMode "tmux"; }
-        bind "Ctrl q" { Quit; }
     }
     locked {
         bind "F12" { SwitchToMode "Normal"; }

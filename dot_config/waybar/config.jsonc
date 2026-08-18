@@ -17,12 +17,13 @@
   "modules-left": [
     "custom/separator#cat",
     "custom/separator#dot-line",
-    "hyprland/workspaces#kanji",
+    "hyprland/workspaces#rw",
     "custom/separator#dot-line",
     "mpris"
   ],
   "modules-center": [
     "clock#3",
+    "custom/pomodoro",
     "custom/separator#dot-line",
     "hyprland/window"
   ],

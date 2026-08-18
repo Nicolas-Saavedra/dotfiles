@@ -15,6 +15,17 @@
     ],
     "on-click-right": "kitty sh -c 'nvtop'"
   },
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+    "tooltip": true,
+    "format-icons": {
+      "default": "󱐋",
+      "performance": "󱐋",
+      "balanced": "󰗑",
+      "power-saver": "󰌪"
+    }
+  },
   "backlight": {
     "interval": 2,
     "align": 0,
@@ -37,8 +48,8 @@
     "on-click-middle": "",
     "on-click-right": "",
     "on-update": "",
-    "on-scroll-up": "$HOME/.config/hypr/scripts/Brightness.sh --inc",
-    "on-scroll-down": "$HOME/.config/hypr/scripts/Brightness.sh --dec",
+    "on-scroll-up": "$HOME/.config/hypr/scripts/brightness.sh up",
+    "on-scroll-down": "$HOME/.config/hypr/scripts/brightness.sh down",
     "smooth-scrolling-threshold": 1
   },
   "backlight#2": {

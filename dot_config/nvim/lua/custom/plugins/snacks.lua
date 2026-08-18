@@ -42,7 +42,12 @@ return {
     notifier = { enabled = true },
     quickfile = { enabled = true },
     scope = { enabled = true },
-    scroll = { enabled = true },
+    scroll = { enabled = true, animate = {
+      duration = {
+        step = 28,
+        total = 200,
+      },
+    } },
     statuscolumn = { enabled = true },
     words = { enabled = true },
     git = { enabled = true },

@@ -33,7 +33,7 @@
 
   "group/laptop": {
     "orientation": "inherit",
-    "modules": ["backlight", "battery"]
+    "modules": ["power-profiles-daemon", "backlight", "battery"]
   },
 
   "group/audio": {

@@ -73,4 +73,42 @@ vim.o.expandtab = true
 vim.o.shiftwidth = 2 -- Indent by 2 spaces
 vim.o.softtabstop = 2 -- Tab feels like 2 spaces
 
+local function set_root()
+  local buf = vim.api.nvim_buf_get_name(0)
+  if buf == '' then
+    return
+  end
+
+  local path = vim.fs.normalize(buf)
+
+  -- Special case: ~/.config/<app>/...
+  local home = vim.fn.expand '~'
+  local config_prefix = home .. '/.config/'
+
+  if path:sub(1, #config_prefix) == config_prefix then
+    local rel = path:sub(#config_prefix + 1)
+    local app = rel:match '([^/]+)'
+    if app then
+      vim.cmd('cd ' .. config_prefix .. app)
+      return
+    end
+  end
+
+  -- Normal project root detection
+  local root = vim.fs.find({ '.git', 'package.json', 'pyproject.toml', 'Makefile' }, { path = path, upward = true })[1]
+
+  if root then
+    vim.cmd('cd ' .. vim.fs.dirname(root))
+  else
+    -- Fallback: directory of the file
+    vim.cmd('cd ' .. vim.fs.dirname(path))
+  end
+end
+
+-- Searches for a valid root for the project, useful to keep telescope working in check
+-- even while opening a dotfile or similar quickly
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = set_root,
+})
+
 -- vim: ts=2 sts=2 sw=2 et

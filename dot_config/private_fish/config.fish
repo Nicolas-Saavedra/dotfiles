@@ -11,7 +11,13 @@ if status is-interactive
   end
 
   alias lg='lazygit'
+  alias dash='gh-dash'
   alias edit='chezmoi edit'
-  alias tmux='zellij'
+  alias ls='eza'
+  alias tree='eza --tree --git-ignore'
+  alias opencode='opencode --port'
+  alias cd='z'
+  alias up='topgrade'
   starship init fish | source
+  zoxide init fish | source
 end

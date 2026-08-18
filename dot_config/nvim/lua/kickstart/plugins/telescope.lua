@@ -76,6 +76,7 @@ return {
         builtin.find_files {
           prompt_title = 'Find All Files',
           no_ignore = true,
+          hidden = true,
         }
       end, { desc = '[F]ind [A]ll files' })
 

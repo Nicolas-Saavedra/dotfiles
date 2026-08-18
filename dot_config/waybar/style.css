@@ -1,43 +1,43 @@
 @define-color rosewater #f5e0dc;
-@define-color flamingo  #f2cdcd;
-@define-color pink      #f5c2e7;
-@define-color mauve     #cba6f7;
-@define-color red       #f38ba8;
-@define-color maroon    #eba0ac;
-@define-color peach     #fab387;
-@define-color yellow    #f9e2af;
-@define-color green     #a6e3a1;
-@define-color teal      #94e2d5;
-@define-color sky       #89dceb;
-@define-color sapphire  #74c7ec;
-@define-color blue      #89b4fa;
-@define-color lavender  #b4befe;
+@define-color flamingo #f2cdcd;
+@define-color pink #f5c2e7;
+@define-color mauve #cba6f7;
+@define-color red #f38ba8;
+@define-color maroon #eba0ac;
+@define-color peach #fab387;
+@define-color yellow #f9e2af;
+@define-color green #a6e3a1;
+@define-color teal #94e2d5;
+@define-color sky #89dceb;
+@define-color sapphire #74c7ec;
+@define-color blue #89b4fa;
+@define-color lavender #b4befe;
 
-@define-color text      #cdd6f4;
-@define-color subtext1  #bac2de;
-@define-color subtext0  #a6adc8;
-@define-color overlay2  #9399b2;
-@define-color overlay1  #7f849c;
-@define-color overlay0  #6c7086;
-@define-color surface2  #585b70;
-@define-color surface1  #45475a;
-@define-color surface0  #313244;
-@define-color base      #1e1e2e;
-@define-color mantle    #181825;
-@define-color crust     #11111b;
+@define-color text #cdd6f4;
+@define-color subtext1 #bac2de;
+@define-color subtext0 #a6adc8;
+@define-color overlay2 #9399b2;
+@define-color overlay1 #7f849c;
+@define-color overlay0 #6c7086;
+@define-color surface2 #585b70;
+@define-color surface1 #45475a;
+@define-color surface0 #313244;
+@define-color base #1e1e2e;
+@define-color mantle #181825;
+@define-color crust #11111b;
 
-@define-color critical  @red;
-@define-color warning   @yellow;
-@define-color fgcolor   @text;
-@define-color bgcolor   @base;
-@define-color alert     @maroon;
+@define-color critical @red;
+@define-color warning @yellow;
+@define-color fgcolor @text;
+@define-color bgcolor @base;
+@define-color alert @maroon;
 
-@define-color accent1   @mauve;
-@define-color accent2   @green;
-@define-color accent3   @peach;
-@define-color accent4   @lavender;
-@define-color accent5   @blue;
-@define-color accent6   @sky;
+@define-color accent1 @mauve;
+@define-color accent2 @green;
+@define-color accent3 @peach;
+@define-color accent4 @lavender;
+@define-color accent5 @blue;
+@define-color accent6 @sky;
 
 * {
     font-family: "MesloLGS Nerd Font";
@@ -63,9 +63,7 @@ tooltip {
     background: @base;
     opacity: 0.6;
     border-radius: 10px;
-    border-width: 2px;
-    border-style: solid;
-    border-color: @crust;
+    border: 2px solid rgba(89, 89, 89, 0.67);
 }
 
 #taskbar button,
@@ -173,8 +171,7 @@ tooltip {
     padding: 4px;
 }
 
-.modules-left > widget:first-child > #workspaces {}
-.modules-right > widget:last-child > #workspaces {}
+
 
 #clock {
     color: @accent2;
@@ -364,9 +361,10 @@ label:focus {
 .modules-left,
 .modules-center,
 .modules-right {
-    background-color: rgba(24, 24, 37, 0.9); /* or @mantle with your theme */
-    border-radius: 10px;
+    background-color: rgba(24, 24, 37, 0.9);
+    border-radius: 6px;
     padding: 4px 8px;
-    margin: 0 6px; /* spacing between them */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* optional */
+    margin: 0 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(89, 89, 89, 0.67);
 }

@@ -48,6 +48,16 @@
     "on-click-right": "swaync-client -d -sw",
     "escape": true
   },
+
+  "custom/pomodoro": {
+    "format": "{}",
+    "return-type": "json",
+    "interval": 1,
+    "exec-if": "$HOME/.config/waybar/scripts/pomodoro_waybar.sh --exists",
+    "exec": "$HOME/.config/waybar/scripts/pomodoro_waybar.sh --json",
+    "tooltip": true,
+    "escape": true
+  },
   // Separators
   "custom/separator#dot": {
     "format": "",

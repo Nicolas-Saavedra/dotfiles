@@ -104,7 +104,6 @@
       "10": "Dieci"
     }
   },
-
   //  NUMBERS and ICONS style
   "hyprland/workspaces#4": {
     "format": " {name} {icon} ",
@@ -165,33 +164,26 @@
     "on-click": "activate",
     "on-scroll-up": "hyprctl dispatch workspace e+1",
     "on-scroll-down": "hyprctl dispatch workspace e-1",
-    "persistent-workspaces": {
-      "*": 5
-    },
-    "format": "{icon} {windows}",
+    "format": "{icon} {windows} ",
     "format-window-separator": " ",
-    "window-rewrite-default": " ",
+    "window-rewrite-default": "",
     "window-rewrite": {
       "title<.*amazon.*>": " ",
-
       "class<firefox|org.mozilla.firefox|librewolf|floorp|mercury-browser|[Cc]achy-browser>": " ",
-      "class<zen>": "󰰷 ",
+      "class<zen>": "󰰷",
       "class<waterfox|waterfox-bin>": " ",
       "class<microsoft-edge>": " ",
       "class<Chromium|Thorium|[Cc]hrome>": " ",
       "class<brave-browser>": "🦁 ",
       "class<tor browser>": " ",
       "class<firefox-developer-edition>": "🦊 ",
-
       "class<kitty|konsole>": " ",
       "class<kitty-dropterm>": " ",
-      "class<com.mitchellh.ghostty>": " ",
+      "class<com.mitchellh.ghostty>": "",
       "class<org.wezfurlong.wezterm>": " ",
-
       "class<[Tt]hunderbird|[Tt]hunderbird-esr>": " ",
       "class<eu.betterbird.Betterbird>": " ",
       "title<.*gmail.*>": "󰊫 ",
-
       "class<[Tt]elegram-desktop|org.telegram.desktop|io.github.tdesktop_x64.TDesktop>": " ",
       "class<discord|[Ww]ebcord|Vesktop>": " ",
       "title<.*whatsapp.*>": " ",
@@ -199,13 +191,11 @@
       "title<.*messenger.*>": " ",
       "title<.*facebook.*>": " ",
       "title<.*reddit.*>": " ",
-
       "title<.*ChatGPT.*>": "󰚩 ",
       "title<.*deepseek.*>": "󰚩 ",
       "title<.*qwen.*>": "󰚩 ",
       "class<subl>": "󰅳 ",
-      "class<slack>": " ",
-
+      "class<slack>": "",
       "class<mpv>": " ",
       "class<celluloid|Zoom>": " ",
       "class<Cider>": "󰎆 ",
@@ -214,13 +204,11 @@
       "class<vlc>": "󰕼 ",
       "title<.*cmus.*>": " ",
       "class<[Ss]potify>": " ",
-
       "class<virt-manager>": " ",
       "class<.virt-manager-wrapped>": " ",
       "class<virtualbox manager>": "💽 ",
       "title<virtualbox>": "💽 ",
       "class<remmina>": "🖥️ ",
-
       "class<VSCode|code-url-handler|code-oss|codium|codium-url-handler|VSCodium>": "󰨞 ",
       "class<dev.zed.Zed>": "󰵁",
       "class<codeblocks>": "󰅩 ",
@@ -229,15 +217,13 @@
       "class<libreoffice-writer>": " ",
       "class<libreoffice-startcenter>": "󰏆 ",
       "class<libreoffice-calc>": " ",
-      "title<.*nvim ~.*>": " ",
+      "title<.*nvim ~.*>": "",
       "title<.*vim.*>": " ",
       "title<.*nvim.*>": " ",
       "title<.*figma.*>": " ",
       "title<.*jira.*>": " ",
       "class<jetbrains-idea>": " ",
-
       "class<obs|com.obsproject.Studio>": " ",
-
       "class<polkit-gnome-authentication-agent-1>": "󰒃 ",
       "class<nwg-look>": " ",
       "class<[Pp]avucontrol|org.pulseaudio.pavucontrol>": "󱡫 ",

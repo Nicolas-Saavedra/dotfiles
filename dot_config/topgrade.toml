@@ -1,0 +1,19 @@
+# topgrade — one-command system + toolchain updates (`up` alias in fish).
+# yay handles pacman+AUR; snap-pac snapshots fire automatically on the pacman step.
+[misc]
+pre_sudo = true
+cleanup = true
+disable = [
+  "containers",   # don't pull every docker image on update
+  "gem",
+  "helm",
+  "vagrant",
+  "gcloud",
+  "shell",        # fish plugins updated rarely; run `topgrade --only shell` when wanted
+]
+
+[linux]
+arch_package_manager = "yay"
+
+[git]
+max_concurrency = 8
