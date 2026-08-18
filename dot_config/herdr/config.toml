@@ -1,0 +1,44 @@
+# herdr configuration — keybinds mirrored from ~/.config/tmux/tmux.conf
+# (prefix ctrl+s, hjkl pane nav, |/- splits, prefix+3 omarchy layout)
+
+[theme]
+name = "catppuccin"
+
+[terminal]
+# tmux forces fish regardless of login shell; match that.
+default_shell = "/usr/bin/fish"
+
+[keys]
+# Same prefix as tmux. Both intercept ctrl+s from pane apps (fish fwd-search),
+# a tradeoff already accepted in the tmux setup.
+prefix = "ctrl+s"
+
+# Splits, tmux-style: | right, - down (herdr defaults prefix+v/minus also work
+# only where they don't conflict; split_vertical here replaces prefix+v).
+split_vertical = "prefix+|"
+split_horizontal = "prefix+minus"
+
+# Pane navigation matches tmux prefix+hjkl (these are herdr defaults, pinned).
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
+
+# tmux: prefix+Tab = last-pane. Frees prefix+tab from cycle_pane_next.
+last_pane = "prefix+tab"
+cycle_pane_next = ""
+cycle_pane_previous = ""
+
+# tmux muscle memory: prefix+d detaches (herdr default was prefix+q).
+detach = "prefix+d"
+
+# tmux: prefix+[ enters copy mode; herdr's closest is scrollback editing.
+edit_scrollback = "prefix+["
+
+new_tab = "prefix+c"
+
+# Omarchy-style 3-pane layout, same key as the tmux macro.
+[[keys.command]]
+key = "prefix+3"
+type = "shell"
+command = "~/.config/herdr/omarchy-layout.sh"
