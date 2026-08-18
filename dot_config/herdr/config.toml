@@ -42,3 +42,16 @@ new_tab = "prefix+c"
 key = "prefix+3"
 type = "shell"
 command = "~/.config/herdr/omarchy-layout.sh"
+
+# Desktop notifications for background agent state changes, routed through
+# swaync via the OS notification service.
+[ui.toast]
+delivery = "system"
+
+# Agent state-change sounds. Drop mp3s into ~/.config/herdr/sounds/:
+#   request.mp3 plays when an agent is blocked waiting for input,
+#   done.mp3 when one finishes.
+[ui.sound]
+enabled = true
+request_path = "sounds/request.mp3"
+done_path = "sounds/done.mp3"
