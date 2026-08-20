@@ -24,6 +24,19 @@ focus_pane_down = "prefix+j"
 focus_pane_up = "prefix+k"
 focus_pane_right = "prefix+l"
 
+# Workspace cycling on shifted j/k, mirroring the pane-nav pair below.
+next_workspace = "prefix+shift+j"
+previous_workspace = "prefix+shift+k"
+
+# Agent cycling on alt+j/k, same pattern.
+next_agent = "prefix+alt+j"
+previous_agent = "prefix+alt+k"
+
+# Indexed jumps, same modifier split: alt = agents, shift = workspaces.
+# (Plain prefix+1..9 remains switch_tab.)
+focus_agent = "prefix+alt+1..9"
+switch_workspace = "prefix+shift+1..9"
+
 # tmux: prefix+Tab = last-pane. Frees prefix+tab from cycle_pane_next.
 last_pane = "prefix+tab"
 cycle_pane_next = ""
@@ -55,3 +68,6 @@ delivery = "system"
 enabled = true
 request_path = "sounds/request.mp3"
 done_path = "sounds/done.mp3"
+
+[ui]
+show_agent_labels_on_pane_borders = true
