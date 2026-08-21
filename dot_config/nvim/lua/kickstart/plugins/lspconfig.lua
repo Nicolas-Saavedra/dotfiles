@@ -253,6 +253,8 @@ return {
         'rust_analyzer', -- used by rustaceanvim
         'codelldb', -- debug adapter for rustaceanvim / nvim-dap
         'tree-sitter-cli', -- required by nvim-treesitter (main branch) to build parsers
+        'roslyn-language-server', -- C# LSP (mason name; roslyn.nvim drives it, see custom/plugins/unity.lua)
+        'csharpier', -- C# formatter (conform)
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -273,7 +275,10 @@ return {
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
         automatic_enable = {
-          exclude = { 'rust_analyzer' }, -- rustaceanvim starts rust-analyzer itself
+          exclude = {
+            'rust_analyzer', -- rustaceanvim starts rust-analyzer itself
+            'roslyn_ls', -- roslyn.nvim starts the Roslyn server itself (custom/plugins/unity.lua)
+          },
         },
       }
     end,

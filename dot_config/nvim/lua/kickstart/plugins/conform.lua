@@ -76,6 +76,7 @@ return {
         python = { 'isort', 'black' },
         nix = { 'alejandra' },
         make = { 'checkmake' },
+        cs = { 'csharpier' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --

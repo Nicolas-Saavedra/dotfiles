@@ -31,6 +31,7 @@
   "opencode.nvim": { "branch": "main", "commit": "2ddeebd3212596b51bf078e6ff52862655b80419" },
   "plenary.nvim": { "branch": "master", "commit": "74b06c6c75e4eeb3108ec01852001636d85a932b" },
   "quicker.nvim": { "branch": "master", "commit": "4a6883cb13fe097a20a046eb55f6dffd239276e3" },
+  "roslyn.nvim": { "branch": "main", "commit": "de9a98d61ed3fd01b5016eea5fe9e32f1a4c7cfb" },
   "rustaceanvim": { "branch": "master", "commit": "f4051fb4662c43a568ce809a37e47c0f4e3d7a31" },
   "snacks.nvim": { "branch": "main", "commit": "882c996cf28183f4d63640de0b4c02ec886d01f2" },
   "tailwind-tools": { "branch": "master", "commit": "fbe982901d4508b0dcd80e07addf0fcb6dab6c49" },

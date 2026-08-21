@@ -19,7 +19,7 @@ return {
         -- kickstart defaults
         'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'json',
         -- languages used on this machine
-        'css', 'csv', 'dockerfile', 'fish', 'git_config', 'git_rebase', 'gitcommit', 'gitignore', 'gleam', 'go',
+        'c_sharp', 'css', 'csv', 'dockerfile', 'fish', 'git_config', 'git_rebase', 'gitcommit', 'gitignore', 'gleam', 'go',
         'hyprlang', 'ini', 'javascript', 'kdl', 'mermaid', 'pem', 'python', 'rasi', 'regex', 'requirements', 'rust',
         'sql', 'ssh_config', 'terraform', 'toml', 'tsx', 'typescript', 'udev', 'xml', 'yaml',
       }
