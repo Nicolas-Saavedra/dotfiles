@@ -26,6 +26,8 @@ through 9 decision branches, adopted the winners. Reference: omarchy.org/changel
 | Super+Ctrl+S | Region OCR → text on clipboard |
 | Super+Shift+R | Toggle quick recording of focused monitor → ~/Videos/Recordings |
 | Super+K | Searchable keybind cheatsheet (walker dmenu) |
+| Super+grave | Drop-down herdr console (Omarchy qconsole port, 2026-08-21): special:scratchpad, top half of focused monitor via scripts/scratchpad-toggle.sh |
+| Super+Shift+grave | Move focused window into the drop-down console |
 | Super+V | Clipboard history via walker (was rofi) |
 | Super+. | Emoji via walker symbols (was rofi) |
 | XF86 volume/brightness | Now through swayosd (OSD overlay); brightness auto-routes to ddcutil on external monitors |

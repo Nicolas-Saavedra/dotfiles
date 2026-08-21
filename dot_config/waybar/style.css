@@ -38,6 +38,7 @@
 @define-color accent4 @lavender;
 @define-color accent5 @blue;
 @define-color accent6 @sky;
+@define-color claude   @peach;    /* Catppuccin peach, not the #D97757 brand orange */
 
 * {
     font-family: "MesloLGS Nerd Font";
@@ -59,11 +60,19 @@ window#waybar.hidden {
     opacity: 0.1;
 }
 
+/* `opacity` fades the whole widget, its text included, which is why these were
+   barely legible. alpha() tints only the background, so the label stays at full
+   strength while the panel keeps a hint of translucency. No Hyprland rule is
+   involved -- waybar draws its own tooltips and there is no layerrule for them. */
 tooltip {
-    background: @base;
-    opacity: 0.6;
+    background: alpha(@base, 0.96);
     border-radius: 10px;
     border: 2px solid rgba(89, 89, 89, 0.67);
+}
+
+tooltip label {
+    color: @fgcolor;
+    padding: 2px 4px;
 }
 
 #taskbar button,
@@ -165,10 +174,26 @@ tooltip {
 #custom-weather.rainyDay,
 #custom-weather.rainyNight,
 #custom-weather.severe,
-#custom-weather.showyIcyDay,
+#custom-weather.snowyIcyDay,
 #custom-weather.snowyIcyNight,
-#custom-weather.sunnyDay {
-    padding: 4px;
+#custom-weather.sunnyDay,
+#custom-claude,
+#custom-recording,
+#custom-tailscale {
+    padding: 4px 8px;
+}
+
+/* Group children sit flush against each other; waybar's `spacing` only applies
+   between top-level modules. This is what makes brightness and the power-profile
+   glyph read as one blob without it. */
+#power-profiles-daemon,
+#backlight,
+#battery,
+#pulseaudio,
+#pulseaudio.microphone,
+#network,
+#bluetooth {
+    margin: 0 2px;
 }
 
 
@@ -182,7 +207,7 @@ tooltip {
 }
 
 #battery {
-    color: @accent5;
+    color: @fgcolor;
 }
 
 @keyframes blink {
@@ -223,19 +248,81 @@ label:focus {
 }
 
 #bluetooth {
-    color: @sapphire;
+    color: @fgcolor;
 }
 
 #network {
-    color: @accent3;
+    color: @fgcolor;
 }
 
 #network.disconnected {
     color: @alert;
 }
 
+/* ---- Ported Omarchy panels ---- */
+
+#custom-tailscale {
+    color: @fgcolor;
+}
+
+#custom-tailscale.stopped,
+#custom-tailscale.error {
+    color: @overlay0;
+}
+
+#custom-tailscale.needslogin {
+    color: @warning;
+}
+
+#custom-claude {
+    color: @claude;
+}
+
+/* Real brand logos rather than nerd-font stand-ins. Drawn as a widget background
+   because a Pango label cannot embed an image. gdk-pixbuf has SVG support
+   compiled in here -- the gdk-pixbuf loaders directory is empty, yet "svg" is
+   in Pixbuf.get_formats(). url() is relative: GTK3 resolves it against this
+   stylesheet, so the path survives on another machine. Must stay after the
+   shared `padding: 4px 8px` block above, whose padding-left it overrides. */
+#custom-tailscale,
+#custom-claude {
+    background-repeat: no-repeat;
+    background-position: 8px center;
+    background-size: 14px 14px;
+    padding-left: 33px;
+}
+
+#custom-tailscale {
+    background-image: url("icons/tailscale.svg");
+}
+
+#custom-claude {
+    background-image: url("icons/claude.svg");
+}
+
+#custom-weather {
+    color: @fgcolor;
+}
+
+#custom-weather.severe {
+    color: @critical;
+}
+
+/* Reuses the existing @keyframes blink so a running recording is impossible to
+   miss, matching Omarchy's ScreenRecording indicator. */
+#custom-recording {
+    color: @crust;
+    background-color: @red;
+    border-radius: 5px;
+    animation-name: blink;
+    animation-duration: 2s;
+    animation-timing-function: steps(12);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
 #pulseaudio {
-    color: @accent4;
+    color: @fgcolor;
 }
 
 #pulseaudio-muted {
@@ -243,7 +330,7 @@ label:focus {
 }
 
 #wireplumber {
-    color: @accent4;
+    color: @fgcolor;
 }
 
 #wireplumber-muted {
@@ -332,7 +419,7 @@ label:focus {
 }
 
 #custom-separator {
-    padding: 4px 6px;
+    padding: 4px 2px;
 }
 
 #backlight-slider slider,

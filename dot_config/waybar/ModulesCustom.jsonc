@@ -58,6 +58,46 @@
     "tooltip": true,
     "escape": true
   },
+  // ---- Ported from Omarchy 4 Quickshell panels (see scripts/) ----
+
+  "custom/tailscale": {
+    "format": "{}",
+    "return-type": "json",
+    "interval": 10,
+    "exec-if": "command -v tailscale",
+    "exec": "$HOME/.config/waybar/scripts/tailscale.sh --json",
+    "on-click": "$HOME/.config/waybar/scripts/tailscale.sh --switch",
+    "on-click-right": "$HOME/.config/waybar/scripts/tailscale.sh --toggle",
+    "tooltip": true
+  },
+
+  // interval 1 so the elapsed clock ticks; the module is empty (and so hidden)
+  // whenever gpu-screen-recorder is not running.
+  "custom/recording": {
+    "format": "{}",
+    "return-type": "json",
+    "interval": 1,
+    "exec": "$HOME/.config/waybar/scripts/recording.sh --json",
+    "on-click": "$HOME/.config/waybar/scripts/recording.sh --stop",
+    "tooltip": true
+  },
+
+  "custom/weather": {
+    "format": "{}",
+    "return-type": "json",
+    "interval": 900,
+    "exec": "$HOME/.config/waybar/scripts/weather.sh",
+    "tooltip": true
+  },
+
+  "custom/claude": {
+    "format": "{}",
+    "return-type": "json",
+    "interval": 60,
+    "exec": "$HOME/.config/waybar/scripts/claude-usage.py",
+    "tooltip": true
+  },
+
   // Separators
   "custom/separator#dot": {
     "format": "",

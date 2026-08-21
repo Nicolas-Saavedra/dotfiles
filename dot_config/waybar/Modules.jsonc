@@ -129,9 +129,17 @@
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
   },
   "clock#3": {
-    //"format": "{:%I:%M %p - %d/%b}", //for AM/PM
-    "format": "{:%H:%M - %d/%b}", // 24H
-    "tooltip": false
+    //"format": "<span letter_spacing='4608'> </span>{:%I:%M %p - %d/%b}", //for AM/PM
+    // The span widens the single space to ~10px so icon->value matches the
+    // right-hand modules; one plain space is ~6px, two are ~14px.
+    "format": "<span letter_spacing='4608'> </span>{:%H:%M - %d/%b}", // 24H
+    // "" is the system zone and is the one the bar shows; the others only
+    // appear in the tooltip through {tz_list}. IANA names, not abbreviations,
+    // so DST is tracked (PDT/PST, EDT/EST, CEST/CET). Add or reorder freely.
+    "timezones": ["", "America/Los_Angeles", "America/New_York", "UTC", "Europe/Berlin"],
+    "timezone-tooltip-format": "{:%H:%M   %a %d   %Z}",
+    "tooltip": true,
+    "tooltip-format": "<b>{0:%A, %d %B %Y}</b>\n\n<b>{0:%H:%M   %a %d   UTC%Ez}</b>\n{tz_list}"
   },
   "clock#4": {
     "interval": 60,
@@ -251,7 +259,7 @@
   },
   "network": {
     "format": "{ifname}",
-    "format-wifi": "{icon}",
+    "format-wifi": "{icon}  {essid}",
     "format-ethernet": "󰌘",
     "format-disconnected": "󰌙",
     "tooltip-format": "{ipaddr}  {bandwidthUpBits}  {bandwidthDownBits}",
@@ -259,7 +267,7 @@
     "tooltip-format-wifi": "{essid} {icon} {signalStrength}%",
     "tooltip-format-ethernet": "{ifname} 󰌘",
     "tooltip-format-disconnected": "󰌙 Disconnected",
-    "max-length": 30,
+    "max-length": 16,
     "format-icons": [
       "󰤯",
       "󰤟",
@@ -267,7 +275,7 @@
       "󰤥",
       "󰤨"
     ],
-    "on-click": "kitty 'nmtui'"
+    "on-click": "ghostty -e nmtui"
   },
   "network#speed": {
     "interval": 1,
@@ -291,8 +299,8 @@
     ]
   },
   "pulseaudio": {
-    "format": "{icon} {volume}%",
-    "format-bluetooth": "{icon} 󰂰 {volume}%",
+    "format": "{icon}  {volume}%",
+    "format-bluetooth": "{icon}  󰂰 {volume}%",
     "format-muted": "󰖁",
     "format-icons": {
       "headphone": "",

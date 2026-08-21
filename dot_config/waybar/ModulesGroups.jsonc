@@ -31,9 +31,11 @@
     "modules": ["temperature", "cpu", "memory", "disk"]
   },
 
+  // "power-profiles-daemon" and "backlight" removed 2026-08-20 (barely used);
+  // add them back to this list to restore the CPU-governor and brightness glyphs.
   "group/laptop": {
     "orientation": "inherit",
-    "modules": ["power-profiles-daemon", "backlight", "battery"]
+    "modules": ["battery"]
   },
 
   "group/audio": {

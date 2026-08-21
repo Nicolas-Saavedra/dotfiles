@@ -23,15 +23,24 @@
   ],
   "modules-center": [
     "clock#3",
-    "custom/pomodoro",
+    "custom/separator#dot-line",
+    "custom/weather",
     "custom/separator#dot-line",
     "hyprland/window"
   ],
   "modules-right": [
+    "custom/recording",
+    "custom/claude",
+    "custom/separator#dot-line",
+    "custom/tailscale",
+    "custom/separator#dot-line",
+    "group/connections",
+    "custom/separator#dot-line",
     "group/laptop",
     "custom/separator#dot-line",
     "group/audio",
     "custom/separator#dot-line",
+    "idle_inhibitor",
     "group/notify"
   ]
 }
