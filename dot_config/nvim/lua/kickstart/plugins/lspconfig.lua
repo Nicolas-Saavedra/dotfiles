@@ -199,7 +199,6 @@ return {
       local servers = {
         clangd = {},
         gopls = {},
-        rust_analyzer = {},
         pyright = {},
         jsonls = {},
         sqlls = {},
@@ -209,6 +208,10 @@ return {
         dockerls = {},
         docker_compose_language_service = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
+        --
+        -- NOTE: rust_analyzer is intentionally NOT listed here: rustaceanvim owns it
+        -- (see custom/plugins/rust-tools.lua). The binary is still installed via
+        -- mason-tool-installer below, and excluded from mason-lspconfig's automatic_enable.
 
         lua_ls = {
           -- cmd = { ... },
@@ -227,8 +230,11 @@ return {
       }
 
       -- Gleam LSP is the exception to the above, it cannot be installed using
-      -- mason, and therefore, it must be setup separate from the list of servers
-      require('lspconfig').gleam.setup {}
+      -- mason, and therefore, it must be enabled separately from the list of servers
+      -- (the binary ships with `gleam` itself; config comes from nvim-lspconfig's lsp/gleam.lua).
+      local non_mason_servers = {
+        gleam = {},
+      }
 
       -- Ensure the servers and tools above are installed
       --
@@ -244,21 +250,30 @@ return {
         'isort',
         'black',
         'checkmake',
+        'rust_analyzer', -- used by rustaceanvim
+        'codelldb', -- debug adapter for rustaceanvim / nvim-dap
+        'tree-sitter-cli', -- required by nvim-treesitter (main branch) to build parsers
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
+      -- Neovim 0.11+ native LSP configuration (`:help lsp-config`).
+      -- The old `require('lspconfig').<server>.setup {}` "framework" is deprecated
+      -- in nvim-lspconfig and prints a backtrace on every use; nvim-lspconfig now
+      -- only provides the default configs under its `lsp/` directory.
+      --
+      -- Apply blink.cmp's capabilities to every server, then layer per-server overrides.
+      vim.lsp.config('*', { capabilities = capabilities })
+      for name, server in pairs(vim.tbl_extend('error', servers, non_mason_servers)) do
+        vim.lsp.config(name, server)
+      end
+      vim.lsp.enable(vim.tbl_keys(non_mason_servers))
+
+      -- mason-lspconfig v2: every server installed through mason is enabled
+      -- automatically with `vim.lsp.enable()` (there are no `handlers` anymore).
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
+        automatic_enable = {
+          exclude = { 'rust_analyzer' }, -- rustaceanvim starts rust-analyzer itself
         },
       }
     end,

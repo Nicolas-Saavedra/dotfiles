@@ -38,6 +38,7 @@ return {
     },
     bigfile = { enabled = true },
     indent = { enabled = true },
+    input = { enabled = true }, -- vim.ui.input (replaced archived dressing.nvim)
     picker = { enabled = true },
     notifier = { enabled = true },
     quickfile = { enabled = true },
