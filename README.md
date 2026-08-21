@@ -22,7 +22,7 @@ notes and rollback commands that came out of that work.
 | Bar | **Waybar** | Modules split across four `.jsonc` includes; runs as a systemd user service |
 | Notifications | **SwayNC** | Notification centre + control panel, styled to match the bar |
 | Launcher | **Walker** (+ elephant) | Also serves clipboard history (`Super+V`) and emoji/symbols (`Super+.`) |
-| Wallpaper | **awww** | Rotation driven by scripts; hyprlock has its own fixed background |
+| Wallpaper | **awww** | Scripted rotation with animated transitions; hyprlock has its own fixed background |
 | Lock / idle | **hyprlock** + **hypridle** | |
 | OSD | **swayosd** | Volume/brightness overlay; brightness routes to ddcutil on external monitors |
 | Terminal | **Ghostty** | JetBrainsMono Nerd Font, 85% opacity, no decorations |
@@ -77,39 +77,65 @@ The most used binds, for orientation:
 
 ### Scripts do the glue work
 
-`hypr/scripts/` holds small POSIX/bash scripts that Hyprland calls from binds and
-`autostart.conf`. The ones tracked here:
+`hypr/scripts/` holds small bash scripts that Hyprland calls from binds and
+`autostart.conf`. They are grouped by what they do:
+
+**Capture and keys**
 
 | Script | Does |
 |---|---|
 | `annotate.sh` | Region screenshot → satty → clipboard + `~/Pictures/Screenshots` |
 | `ocr.sh` | Region select → tesseract → clipboard |
 | `record-toggle.sh` | gpu-screen-recorder start/stop on one bind |
-| `brightness.sh` | Backlight on the laptop panel, DDC/CI (ddcutil) on externals — same keys either way |
 | `keybind-cheatsheet.sh` | Parses `keybinding.conf` and renders the cheatsheet |
-| `lid.sh` | Lid-close handling when docked/undocked |
+| `scratchpad-toggle.sh` | Drop-down console: recomputes the `special:scratchpad` gap from the focused monitor's work area on every toggle, so it is the top half of whichever screen has focus |
 | `transcode.sh` | ffmpeg wrapper for quick re-encodes |
+
+**Monitors and power**
+
+| Script | Does |
+|---|---|
+| `external-monitor-primary.sh` | Listens on Hyprland's event socket; when any non-internal monitor is live it becomes the only display and the laptop panel turns off, with a hard fallback that forces the panel on if zero monitors are ever observed |
+| `external-monitor-inhibit.sh` | Holds a `systemd-inhibit` lock while docked so lid-close doesn't suspend |
+| `force-internal.sh` | Escalating recovery ladder that brings the internal panel back from a zero-monitor state; `Super+Shift+M` calls it blind |
+| `waybar-monitor-reload.sh` | Debounced restart of the waybar user service on hotplug, which waybar otherwise handles badly |
+| `brightness.sh` | Backlight on the laptop panel, DDC/CI (ddcutil) on externals — same keys either way |
+| `lid.sh` | Lid-close handling when docked/undocked |
 | `reload.sh` | Re-applies monitor state on config reload |
 
-A few scripts referenced by the config — the wallpaper rotation set, the external-monitor
-hotplug handlers, the scratchpad toggle, `force-internal.sh`, and `hypridle.conf` — are
-still being cleaned up and are not in the repo yet. If you see a bind pointing at a file
-that isn't here, that's why.
+**Wallpaper**
+
+| Script | Does |
+|---|---|
+| `wallpaper-rotate.sh` | Daemon: cycles `wallpaper-rotation.list` every 30 min via awww; `SIGUSR1` advances immediately |
+| `wallpaper-apply.sh` | The one place that calls `awww img` — transition type, fps, and duration are env-tunable |
+| `wallpaper-menu.sh` / `wallpaper-set.sh` | Walker pickers to toggle rotation membership (`Super+B`) or force an image now (`Super+Shift+B`) |
+| `wallpaper-lib.sh` | Shared helpers; maps filenames to display names from an optional `wallpaper-meta.json` |
+
+The monitor scripts all key off the internal panel being named `eDP-1`, which is what the
+kernel calls the built-in display on essentially every laptop, so they should transfer to
+other hardware unchanged. The wallpaper data files (`wallpaper-rotation.list`,
+`wallpaper-meta.json`) and my actual wallpapers are not tracked; the scripts fall back to
+filenames when the metadata is absent. `hyprconfig-switch.sh`, bound to
+`Super+Shift+Ctrl+H`, flips to an in-progress Lua config that lives in a separate worktree
+and is also not published yet.
 
 ### Waybar and SwayNC are composed, not monolithic
 
-`waybar/config.jsonc` defines the layout and `include`s four module files
-(`Modules`, `ModulesWorkspaces`, `ModulesCustom`, `ModulesGroups`), so the bar can be
-rearranged without touching module definitions. Custom modules cover a recording indicator,
+`waybar/config` is a three-line shim that `include`s `config.jsonc` (waybar loads `config`
+first if it exists, so the shim keeps the real file's `.jsonc` extension and editor support).
+`config.jsonc` defines the layout and `include`s four module files (`Modules`,
+`ModulesWorkspaces`, `ModulesCustom`, `ModulesGroups`), so the bar can be rearranged
+without touching module definitions. Custom modules cover a recording indicator,
 Claude/agent status, Tailscale state, and a weather widget. Waybar runs as a systemd user
 service rather than an `exec-once`, so it restarts itself on a crash.
 
 ### One palette, many consumers
 
-`colors/` holds the Catppuccin Mocha palette exported as both CSS (`colors.css`, imported by
-the SwayNC stylesheet) and rasi (imported by the rofi config). Waybar carries the same values inline in `style.css`; other tools use their native Catppuccin ports
-(`btop/themes/`, `qt5ct/colors/`, the ghostty `theme =` line, the nvim `catppuccin.lua`
-plugin spec), but everything resolves to the same hex values.
+`colors/colors.css` holds the Catppuccin Mocha palette as CSS variables, imported by the
+SwayNC stylesheet. Waybar carries the same values inline in `style.css`; other tools use
+their native Catppuccin ports (`btop/themes/`, `qt5ct/colors/`, the ghostty `theme =` line,
+the nvim `catppuccin.lua` plugin spec), but everything resolves to the same hex values.
 
 ### Shell: public config, private overlay
 
@@ -181,7 +207,9 @@ Things that will not transfer as-is:
   output of `hyprctl monitors` on your machine.
 - `hypr/conf/programs.conf` assumes `ghostty`, `nemo` and `zen-browser` are installed.
 - The scripts assume `satty`, `tesseract`, `gpu-screen-recorder`, `ddcutil`, `swayosd`,
-  `walker`, `cliphist`, `hyprshot`, and `playerctl` are on `$PATH`.
+  `walker`, `cliphist`, `hyprshot`, `playerctl`, `awww`, `jq`, and `ncat` are on `$PATH`.
+- `hypridle.conf` and `Super+Shift+L` call `~/.local/bin/screensaver-launch`, which is not
+  tracked here; drop those lines or point them at your own screensaver.
 - `fish/config.fish` prints `(no private config loaded)` until you create the overlay file
   or remove that block.
 
