@@ -8,6 +8,7 @@ disable = [
   "gem",
   "helm",
   "vagrant",
+  "pnpm",         # no global packages; step fails on PATH check
   "gcloud",
   "shell",        # fish plugins updated rarely; run `topgrade --only shell` when wanted
 ]
