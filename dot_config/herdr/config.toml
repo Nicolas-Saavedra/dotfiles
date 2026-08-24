@@ -1,3 +1,4 @@
+onboarding = false
 # herdr configuration — keybinds mirrored from ~/.config/tmux/tmux.conf
 # (prefix ctrl+s, hjkl pane nav, |/- splits, prefix+3 omarchy layout)
 

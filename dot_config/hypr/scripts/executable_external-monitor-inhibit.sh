@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# Holds a systemd-inhibit lock while any external (non-eDP-1) monitor is
-# connected. hypridle's listeners have ignore_inhibit=false, so this pauses
-# the lock / DPMS-off / suspend timers as long as the lock is held.
+# Holds a systemd-inhibit *sleep* lock while any external (non-eDP-1) monitor
+# is connected, so the box never suspends while docked. Idle is deliberately NOT
+# inhibited: hypridle.conf runs the screensaver while docked and skips lock /
+# DPMS-off / suspend itself via scripts/docked.sh.
 #
 # Listens on Hyprland's event socket for monitor add/remove events and
 # re-syncs the lock state. On exit, the trap releases the lock.
@@ -20,7 +21,7 @@ has_external_monitor() {
 start_inhibit() {
     is_alive "$INHIBIT_PID" && return
     systemd-inhibit \
-        --what=idle:sleep \
+        --what=sleep \
         --who=external-monitor-inhibit \
         --why="External monitor connected" \
         --mode=block \
