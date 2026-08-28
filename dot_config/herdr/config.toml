@@ -3,8 +3,9 @@ onboarding = false
 # (prefix ctrl+s, hjkl pane nav, |/- splits, prefix+3 omarchy layout)
 
 [theme]
-name = "catppuccin"
+name = "terminal"
 
+auto_switch = false
 [terminal]
 # tmux forces fish regardless of login shell; match that.
 default_shell = "/usr/bin/fish"
@@ -66,7 +67,7 @@ delivery = "system"
 #   request.mp3 plays when an agent is blocked waiting for input,
 #   done.mp3 when one finishes.
 [ui.sound]
-enabled = true
+enabled = false
 request_path = "sounds/request.mp3"
 done_path = "sounds/done.mp3"
 
