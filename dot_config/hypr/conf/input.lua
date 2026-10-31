@@ -1,0 +1,30 @@
+-- ██╗███╗   ██╗██████╗ ██╗   ██╗████████╗
+-- ██║████╗  ██║██╔══██╗██║   ██║╚══██╔══╝
+-- ██║██╔██╗ ██║██████╔╝██║   ██║   ██║
+-- ██║██║╚██╗██║██╔═══╝ ██║   ██║   ██║
+-- ██║██║ ╚████║██║     ╚██████╔╝   ██║
+-- ╚═╝╚═╝  ╚═══╝╚═╝      ╚═════╝    ╚═╝
+
+hl.config({
+    input = {
+        kb_layout  = "us,latam",
+        kb_options = "grp:win_space_toggle",
+
+        follow_mouse = 1,
+
+        sensitivity   = 1, -- -1.0 - 1.0, 0 means no modification.
+        accel_profile = "flat",
+
+        touchpad = {
+            natural_scroll       = true,
+            scroll_factor        = 0.15,
+            disable_while_typing = false,
+        },
+    },
+})
+
+-- Per-device override
+hl.device({
+    name        = "epic-mouse-v1",
+    sensitivity = 0,
+})

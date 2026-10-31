@@ -6,7 +6,7 @@
 # swapping every $INTERVAL seconds via wallpaper-apply.sh (awww, with an
 # animated transition).
 #
-# Started from conf/autostart.conf as an exec-once. The wallpaper menu
+# Started from conf/autostart.lua on hyprland.start. The wallpaper menu
 # (wallpaper-menu.sh) edits the list and writes the current pick to STATEFILE;
 # this daemon re-reads both every tick, so menu changes take effect on the next
 # rotation. Send SIGUSR1 to force an immediate advance.

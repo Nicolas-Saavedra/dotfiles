@@ -1,0 +1,27 @@
+-- ███╗   ███╗██╗███████╗ ██████╗
+-- ████╗ ████║██║██╔════╝██╔════╝
+-- ██╔████╔██║██║███████╗██║
+-- ██║╚██╔╝██║██║╚════██║██║
+-- ██║ ╚═╝ ██║██║███████║╚██████╗
+-- ╚═╝     ╚═╝╚═╝╚══════╝ ╚═════╝
+
+hl.config({
+    misc = {
+        force_default_wallpaper    = 0,    -- Set to 0 or 1 to disable the anime mascot wallpapers
+        disable_hyprland_logo      = true, -- If true disables the random hyprland logo / anime girl background. :(
+        disable_splash_rendering   = true,
+        initial_workspace_tracking = 1,
+        key_press_enables_dpms     = true, -- key press wakes display
+        mouse_move_enables_dpms    = true, -- mouse move wakes display
+    },
+
+    binds = {
+        hide_special_on_workspace_change = true, -- Drop-down console retracts when switching workspace
+    },
+})
+
+-- Lid switch: lock, then turn eDP-1 off while docked or suspend while not
+-- (scripts/lid.sh). Locked, so it still fires on the lock screen.
+local lid = require("lib.context").scripts .. "/lid.sh"
+hl.bind("switch:on:Lid Switch",  hl.dsp.exec_cmd(lid .. " close"), { locked = true, description = "Lid closed" })
+hl.bind("switch:off:Lid Switch", hl.dsp.exec_cmd(lid .. " open"),  { locked = true, description = "Lid opened" })

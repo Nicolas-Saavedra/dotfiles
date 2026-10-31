@@ -1,4 +1,6 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+
+. "$(dirname "$0")/hypr-ipc.sh"
 
 has_external_monitor() {
   hyprctl monitors | grep '^Monitor ' | grep -vq '^Monitor eDP-1 '
@@ -13,12 +15,12 @@ case "${1:-}" in
   close)
     lock_now
     if has_external_monitor; then
-      hyprctl keyword monitor "eDP-1, disable"
+      hypr_monitor "eDP-1, disable"
     else
       systemctl suspend
     fi
     ;;
   open)
-    hyprctl keyword monitor "eDP-1, preferred, auto, 1"
+    hypr_monitor "eDP-1, preferred, 0x0, 1"
     ;;
 esac

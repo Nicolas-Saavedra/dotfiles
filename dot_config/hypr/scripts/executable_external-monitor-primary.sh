@@ -4,12 +4,17 @@
 # disable the internal eDP-1 panel. When no external is present, (re-)enable
 # eDP-1 so there is ALWAYS a screen.
 #
+# Exception: externals listed in EXTEND_DESCS (a portable screen used *with*
+# the laptop, not instead of it) extend the desktop — eDP-1 stays on and the
+# external sits beside it. If any other external is also connected, the
+# external-only behaviour wins. A closed lid always keeps eDP-1 off.
+#
 # eDP-1 is only ever disabled while an external monitor is confirmed live, so
 # unplugging the external (or booting undocked) always restores the laptop
 # panel — you can never end up with no display.
 #
 # Listens on Hyprland's event socket for monitor add/remove events and for
-# config reloads (which re-apply monitors.conf and would otherwise re-enable
+# config reloads (which re-apply conf/monitors.lua and could re-enable
 # eDP-1), re-syncing the layout on each. Guards every toggle against the
 # current state so it converges without event churn.
 #
@@ -27,6 +32,13 @@ INT="eDP-1"
 SETTLE=0.4  # seconds to let Hyprland finish (re)configuring before we read state
 LOG="${XDG_RUNTIME_DIR:-/tmp}/external-monitor-primary.log"
 
+# Description prefixes (as shown by `hyprctl monitors`) of externals that
+# extend the desktop instead of replacing eDP-1. Keep in step with the
+# `extend = true` entries in conf/monitors.lua.
+EXTEND_DESCS=(
+    "Acer Technologies PM161W"  # portable USB-C screen
+)
+
 log() { printf '%s %s\n' "$(date '+%H:%M:%S')" "$*" >>"$LOG" 2>/dev/null || true; }
 
 # Names of all currently-enabled monitors that are not the internal panel.
@@ -36,6 +48,28 @@ external_names() {
 }
 
 has_external() { [ -n "$(external_names)" ]; }
+
+# True when every enabled external matches an EXTEND_DESCS prefix.
+extend_only() {
+    local desc p
+    while IFS= read -r desc; do
+        for p in "${EXTEND_DESCS[@]}"; do
+            case "$desc" in "$p"*) continue 2 ;; esac
+        done
+        return 1
+    done < <(hyprctl monitors -j 2>/dev/null \
+        | jq -r '.[] | select(.name != "'"$INT"'") | .description')
+    return 0
+}
+
+# True when eDP-1 sits at 0,0 and no external overlaps it there.
+internal_first() {
+    hyprctl monitors -j 2>/dev/null | jq -e --arg n "$INT" '
+        any(.[]; .name == $n and .x == 0 and .y == 0)
+        and all(.[]; .name == $n or .x != 0 or .y != 0)' >/dev/null
+}
+
+lid_closed() { grep -q closed /proc/acpi/button/lid/*/state 2>/dev/null; }
 
 # Number of currently-enabled monitors (disabled ones are absent from this list).
 enabled_count() {
@@ -51,6 +85,8 @@ is_enabled() {
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 
+. "$HERE/hypr-ipc.sh"
+
 # Bring eDP-1 back up. Delegated to force-internal.sh, which escalates through
 # several recovery methods because a 0-monitor -> 1-monitor modeset can silently
 # fail on the aquamarine backend (see that script for the gory details).
@@ -58,17 +94,41 @@ enable_internal() {
     "$HERE/force-internal.sh"
 }
 
+# (Re-)apply each external's rule. A later name rule would beat a desc: rule
+# from the config, so conf/monitors.lua re-applies the matching desc: rule, or
+# native mode if there is none (M.apply_external). `auto` places it at 0,0 when
+# eDP-1 is gone, or to the right of it when eDP-1 is on.
+apply_external_rules() {
+    local name
+    while IFS= read -r name; do
+        [ -n "$name" ] || continue
+        hyprctl eval "require('conf.monitors').apply_external('$name')" >/dev/null
+    done < <(external_names)
+}
+
 sync_state() {
-    if has_external; then
+    if has_external && extend_only; then
+        # Only extend-type externals → keep eDP-1 on beside them, unless the
+        # lid is closed (lid.sh owns that case). Re-apply the externals' rules
+        # so they flow to the right of eDP-1 instead of overlapping it at 0,0.
+        if ! lid_closed && ! is_enabled "$INT"; then
+            enable_internal
+            apply_external_rules
+            log "extend-only external present -> enabled $INT alongside it"
+        elif is_enabled "$INT" && ! internal_first; then
+            # Something (lid.sh, a reload) re-enabled eDP-1 at `auto`, which
+            # flows it to the right of the external. Pin it back to 0,0 and
+            # re-flow the externals after it.
+            hypr_monitor "$INT,preferred,0x0,1"
+            apply_external_rules
+            log "extend-only external present -> moved $INT back to 0,0"
+        fi
+    elif has_external; then
         # An external is live → it becomes primary at native res. Only act on
         # the transition (while the internal panel is still on) to avoid churn.
         if is_enabled "$INT"; then
-            while IFS= read -r name; do
-                [ -n "$name" ] || continue
-                # `auto` places it at 0,0 once eDP-1 is gone; `preferred` = native mode.
-                hyprctl keyword monitor "$name,preferred,auto,1"
-            done < <(external_names)
-            hyprctl keyword monitor "$INT,disable"
+            apply_external_rules
+            hypr_monitor "$INT,disable"
             log "external present -> disabled $INT"
         fi
     else
@@ -104,6 +164,9 @@ while IFS= read -r line; do
             # which also naturally debounces add/remove bursts.
             sleep "$SETTLE"
             sync_state
+            # A newly added (or re-enabled) output has no wallpaper until the
+            # next rotation; paint the current one onto it.
+            "$HERE/wallpaper-fill-outputs.sh" &
             ;;
     esac
 done < <(ncat --recv-only -U "$SOCK")

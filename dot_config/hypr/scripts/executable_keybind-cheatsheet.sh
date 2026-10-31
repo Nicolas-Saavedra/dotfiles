@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # Searchable cheatsheet of all Hyprland keybinds (Super+K), rendered in walker's
-# dmenu mode. Parses conf/keybinding.conf, so it stays current automatically.
+# dmenu mode. Reads the live binds from `hyprctl binds -j`, so it stays current
+# automatically.
 #
-# Every bind there carries a trailing "# ..." summary written in plain language;
-# that text is what shows up here, and it is what the search box matches against.
-# A bind with no summary falls back to its raw dispatcher, which reads badly on
-# purpose — it is the cue to go write one.
+# Every bind in conf/keybinding.lua carries a plain-language `description`; that
+# text is what shows up here, and it is what the search box matches against. A
+# bind with no description falls back to its raw dispatcher, which reads badly
+# on purpose — it is the cue to go write one.
 #
 # Rows are laid out as two columns padded to the widest key combo in the file, so
 # the descriptions line up. That only looks right in a fixed-width font: walker's
@@ -15,10 +16,22 @@
 # with a trailing space, that is the number to raise.
 set -uo pipefail
 
-CONF="$HOME/.config/hypr/conf/keybinding.conf"
+# One "MODS, key, action # summary" line per bind, in definition order.
+bind_lines() {
+  # modmask bits: SHIFT=1, CONTROL=4, ALT=8, SUPER=64. The lid-switch binds
+  # (conf/misc.lua) are not keys you press, so they stay out.
+  hyprctl binds -j | jq -r '
+    def bit($b): ((.modmask / $b) | floor) % 2 == 1;
+    .[] | select(.key | startswith("switch:") | not)
+    | ([ (if bit(64) then "SUPER" else empty end),
+         (if bit(1)  then "SHIFT" else empty end),
+         (if bit(4)  then "CONTROL" else empty end),
+         (if bit(8)  then "ALT" else empty end) ] | join(" ")) as $mods
+    | "\($mods), \(.key), \(.dispatcher) \(.arg)"
+      + (if .has_description then " # \(.description)" else "" end)'
+}
 
-grep -E '^bind[a-z]*[[:space:]]*=' "$CONF" \
-  | sed -E 's/^bind[a-z]*[[:space:]]*=[[:space:]]*//; s/\$mainMod/SUPER/g' \
+bind_lines \
   | awk '
       function trim(s) { gsub(/^[ \t]+|[ \t]+$/, "", s); return s }
 
@@ -38,6 +51,8 @@ grep -E '^bind[a-z]*[[:space:]]*=' "$CONF" \
         u = toupper(k)
         if (u == "RETURN" || u == "KP_ENTER") return "Enter"
         if (u == "ESCAPE")     return "Esc"
+        if (u == "TAB")        return "Tab"
+        if (u == "GRAVE")      return "`"
         if (u == "PERIOD")     return "."
         if (u == "COMMA")      return ","
         if (u == "LEFT")       return "Left"

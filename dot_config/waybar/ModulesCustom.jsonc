@@ -22,7 +22,7 @@
 
   "custom/quit": {
     "format": "󰗼",
-    "on-click": "hyprctl dispatch exit",
+    "on-click": "hyprctl dispatch 'hl.dsp.exit()'",
     "tooltip": true,
     "tooltip-format": "Left Click: Exit Hyprland"
   },
@@ -49,14 +49,18 @@
     "escape": true
   },
 
+  // interval 1 so the countdown ticks, and because that poll is what advances
+  // the phase and fires the notification -- see scripts/pomodoro.sh. No exec-if:
+  // the idle glyph has to stay on the bar for the click that starts a session.
   "custom/pomodoro": {
     "format": "{}",
     "return-type": "json",
     "interval": 1,
-    "exec-if": "$HOME/.config/waybar/scripts/pomodoro_waybar.sh --exists",
-    "exec": "$HOME/.config/waybar/scripts/pomodoro_waybar.sh --json",
-    "tooltip": true,
-    "escape": true
+    "exec": "$HOME/.config/waybar/scripts/pomodoro.sh --json",
+    "on-click": "$HOME/.config/waybar/scripts/pomodoro.sh --toggle",
+    "on-click-right": "$HOME/.config/waybar/scripts/pomodoro.sh --stop",
+    "on-click-middle": "$HOME/.config/waybar/scripts/pomodoro.sh --skip",
+    "tooltip": true
   },
   // ---- Ported from Omarchy 4 Quickshell panels (see scripts/) ----
 

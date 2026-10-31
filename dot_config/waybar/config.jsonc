@@ -30,6 +30,7 @@
   ],
   "modules-right": [
     "custom/recording",
+    "custom/pomodoro",
     "custom/claude",
     "custom/separator#dot-line",
     "custom/tailscale",

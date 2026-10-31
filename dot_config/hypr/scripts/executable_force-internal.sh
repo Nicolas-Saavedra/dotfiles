@@ -2,7 +2,7 @@
 # Force the internal panel (eDP-1) back on, escalating through several recovery
 # methods. Re-enabling a previously-`disable`d panel from a ZERO-monitor state
 # (the instant after the external is unplugged) silently fails to modeset on
-# Hyprland's aquamarine backend, even though the same `keyword monitor` works
+# Hyprland's aquamarine backend, even though the same monitor rule works
 # fine when another output is still live. A single command therefore isn't
 # enough, so we try progressively harder methods and stop at the first that
 # actually brings eDP-1 up, logging which one won.
@@ -25,20 +25,25 @@ is_enabled() {
         | jq -e --arg n "$1" 'any(.[]; .name == $n)' >/dev/null
 }
 
-# Escalation ladder. Each entry is passed straight to `hyprctl` (word-split on
-# spaces; the monitor spec has no spaces so it stays one arg). After each we
-# also force DPMS on in case the panel comes back powered-down, then re-check.
+. "$(dirname "$0")/hypr-ipc.sh"
+
+# Escalation ladder. A "monitor <rule>" entry is applied through hypr_monitor;
+# anything else is passed straight to `hyprctl`. After each we also force DPMS
+# on in case the panel comes back powered-down, then re-check.
 methods=(
-    "keyword monitor $INT,preferred,0x0,1"
+    "monitor $INT,preferred,0x0,1"
     "reload"
-    "keyword monitor $INT,highres,0x0,1"
-    "keyword monitor $INT,preferred,0x0,1"
+    "monitor $INT,highres,0x0,1"
+    "monitor $INT,preferred,0x0,1"
 )
 
 for m in "${methods[@]}"; do
     # shellcheck disable=SC2086
-    hyprctl $m >/dev/null 2>&1
-    hyprctl dispatch dpms on "$INT" >/dev/null 2>&1 || true
+    case "$m" in
+        "monitor "*) hypr_monitor "${m#monitor }" >/dev/null 2>&1 ;;
+        *)           hyprctl $m >/dev/null 2>&1 ;;
+    esac
+    hypr_dpms on "$INT" >/dev/null 2>&1 || true
     sleep 0.4
     if is_enabled "$INT"; then
         log "'$m' brought $INT up"

@@ -1,0 +1,5 @@
+# Hand-made backups of config files and scripts
+*.bak
+*.bak[0-9]
+*.bak.*
+*.pre-*

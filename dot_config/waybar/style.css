@@ -178,6 +178,7 @@ tooltip label {
 #custom-weather.snowyIcyNight,
 #custom-weather.sunnyDay,
 #custom-claude,
+#custom-pomodoro,
 #custom-recording,
 #custom-tailscale {
     padding: 4px 8px;
@@ -313,6 +314,42 @@ label:focus {
 #custom-recording {
     color: @crust;
     background-color: @red;
+    border-radius: 5px;
+    animation-name: blink;
+    animation-duration: 2s;
+    animation-timing-function: steps(12);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+/* Pomodoro. Idle is dimmed so a timer nobody is using reads as furniture, and
+   the last minute of a phase borrows the recording indicator's blink. `.ending`
+   comes last on purpose: it shares specificity with .work/.break and has to win. */
+#custom-pomodoro {
+    color: @fgcolor;
+}
+
+#custom-pomodoro.idle {
+    color: @overlay0;
+}
+
+#custom-pomodoro.work {
+    color: @red;
+}
+
+#custom-pomodoro.break {
+    color: @green;
+}
+
+/* Covers both a timer you paused and one parked after a break waiting on you,
+   so it is coloured to be noticed rather than dimmed like idle. */
+#custom-pomodoro.paused {
+    color: @warning;
+}
+
+#custom-pomodoro.ending {
+    color: @crust;
+    background-color: @peach;
     border-radius: 5px;
     animation-name: blink;
     animation-duration: 2s;

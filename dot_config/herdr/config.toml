@@ -67,9 +67,10 @@ delivery = "system"
 #   request.mp3 plays when an agent is blocked waiting for input,
 #   done.mp3 when one finishes.
 [ui.sound]
-enabled = false
+enabled = true
 request_path = "sounds/request.mp3"
 done_path = "sounds/done.mp3"
 
 [ui]
 show_agent_labels_on_pane_borders = true
+status_indicators = "symbols"

@@ -1,0 +1,42 @@
+{
+  "biking-sunset.jpg": {
+    "name": "Watermelon Field Twilight",
+    "description": "A late ride home through the watermelon fields, dog trotting alongside, fireflies under a pink dusk sky."
+  },
+  "bsod.png": {
+    "name": "Skill Issue",
+    "description": "A snarky Arch-flavored blue screen of death — 69% complete, stop code NOPE_CHECK_THE_LOGS_MABY."
+  },
+  "hollow-knight.png": {
+    "name": "City of Tears",
+    "description": "The little Knight in the dark, distant lamplit windows glowing across Hallownest."
+  },
+  "keyboard-2.png": {
+    "name": "Endgame Board",
+    "description": "A moody render of a compact mechanical keyboard with a silver volume knob, glowing faintly green on a dark desk."
+  },
+  "knight-building.png": {
+    "name": "Vigil in the Ruins",
+    "description": "A lone knight, sword drawn, wading through an overgrown gothic graveyard toward a moonlit chapel arch."
+  },
+  "mushishi.jpg": {
+    "name": "Ginko by the Water",
+    "description": "Mushishi — Ginko at the marsh's edge amid drifting motes of light."
+  },
+  "old-computer.png": {
+    "name": "Retro Rig",
+    "description": "A pink-lit shrine of vintage hardware — Commodore, Game Boy, joystick and cassette tapes."
+  },
+  "signal-enthusiast.jpg": {
+    "name": "Uncle Tarantilo's",
+    "description": "A tinkerer wiring up salvaged TVs and radios at dusk outside a shop selling everything you don't need."
+  },
+  "shinobu-night-wallpaper.png": {
+    "name": "Shinobu Under the Crescent",
+    "description": "Shinobu Oshino (Monogatari) amid the wreckage, watching the city lights beneath a crescent moon in a Catppuccin Mocha night, crows scattered around."
+  },
+  "touhou-lake.jpg": {
+    "name": "Scarlet Mist Lake",
+    "description": "A painterly lake beneath a rose-streaked sky, a lone figure adrift before a distant mansion."
+  }
+}
